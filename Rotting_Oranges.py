@@ -1,5 +1,5 @@
-# Time Complexity : O(N)
-# Space Complexity : O(N)
+# Time Complexity : O(MN)
+# Space Complexity : O(MN)
 # Did this code successfully run on Leetcode : Yes
 # Any problem you faced while coding this : No
 
@@ -14,7 +14,6 @@
 # Increment the time by one until for each level until the queue is not empty
 # Then check after incrementing the time if there is any fresh orange left if not return time
 # In the end return -1
-
 
 from collections import deque
 class Solution:
@@ -46,14 +45,44 @@ class Solution:
                         grid[r][c] = 2
                         fresh -= 1
                         queue.append((r,c))
-                    if fresh == 0:
-                        return time
             time += 1
             if fresh == 0:
                 return time
-        else:
-            return -1
+        return -1
+#BFS
+
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        if not grid:
+            return 0
+        self.m = len(grid)
+        self.n = len(grid[0])
+        self.dirs = {(0,1), (1,0), (-1,0), (0,-1)}
+        for i in range(self.m):
+            for j in range(self.n):
+                if grid[i][j] == 2:
+                    self.helper(grid, i, j, 2)
+        result = 2
+        for i in range(self.m):
+            for j in range(self.n):
+                if grid[i][j] == 1:
+                    return -1
+                result = max(result, grid[i][j])
+        return result - 2
+
+    def helper(self, grid, r, c, time):
+        if r < 0 or r == self.m or c < 0 or c == self.n:
+            return 
+        if grid[r][c] < time and grid[r][c] != 1:
+            return
+        grid[r][c] = time
+        for dir in self.dirs:
+            row = r + dir[0]
+            col = c + dir[1]
+            self.helper(grid, row, col, time + 1)
+            
         
+
 
 
         
